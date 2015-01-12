@@ -1,1 +1,3 @@
-src/main/java-gen/
+.DS_Store
+/build
+/src/main/java-gen
