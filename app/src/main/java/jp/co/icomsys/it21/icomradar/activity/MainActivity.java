@@ -1,39 +1,95 @@
 package jp.co.icomsys.it21.icomradar.activity;
 
-import android.app.FragmentTransaction;
+import android.app.Activity;
+
+import android.app.ActionBar;
 import android.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v4.widget.DrawerLayout;
 
+import jp.co.icomsys.it21.icomradar.fragment.NavigationDrawerFragment;
 import jp.co.icomsys.it21.icomradar.R;
 import jp.co.icomsys.it21.icomradar.fragment.RadarMapFragment;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+    /**
+     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+     */
+    private NavigationDrawerFragment mNavigationDrawerFragment;
+
+    /**
+     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+     */
+    private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 最初はPatientListFragmentを表示
-        if (savedInstanceState == null) {
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
 
-            FragmentManager manager = getFragmentManager();
-            FragmentTransaction ft = manager.beginTransaction();
-            RadarMapFragment fragment = new RadarMapFragment();
-            ft.add(R.id.root, fragment, RadarMapFragment.class.getName());
-            ft.commit();
-        }
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
     @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        // update the main content by replacing fragments
+        FragmentManager fragmentManager = getFragmentManager();
+
+        RadarMapFragment fragment = (RadarMapFragment) fragmentManager.findFragmentById(R.id.container);
+
+        if (fragment == null) {
+            fragment = RadarMapFragment.newInstance(position + 1);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, RadarMapFragment.newInstance(position + 1))
+                    .commit();
+        }
+    }
+
+    public void onSectionAttached(int number) {
+        switch (number) {
+            case 1:
+                mTitle = getString(R.string.title_section1);
+                break;
+            case 2:
+                mTitle = getString(R.string.title_section2);
+                break;
+            case 3:
+                mTitle = getString(R.string.title_section3);
+                break;
+        }
+    }
+
+    public void restoreActionBar() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+//        actionBar.setTitle(mTitle);
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            // Only show items in the action bar relevant to this screen
+            // if the drawer is not showing. Otherwise, let the drawer
+            // decide what to show in the action bar.
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            restoreActionBar();
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -42,12 +98,9 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

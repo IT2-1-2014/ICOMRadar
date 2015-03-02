@@ -1,5 +1,6 @@
 package jp.co.icomsys.it21.icomradar.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.Service;
 import android.location.Location;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,10 +22,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import jp.co.icomsys.it21.icomradar.R;
+import jp.co.icomsys.it21.icomradar.activity.MainActivity;
 
-public class RadarMapFragment extends Fragment implements OnMapReadyCallback,LocationListener {
+public class RadarMapFragment extends Fragment implements OnMapReadyCallback, LocationListener {
 
     private MapView mapView;
+
+    private static final String ARG_SECTION_NUMBER = "section_number";
 
     private LocationManager mLocationManager;
     private Location mLocation;
@@ -37,10 +42,28 @@ public class RadarMapFragment extends Fragment implements OnMapReadyCallback,Loc
     // 更新距離(目安)
     private static final int LOCATION_UPDATE_MIN_DISTANCE = 0;
 
+    /**
+     * Returns a new instance of this fragment for the given section
+     * number.
+     */
+    public static RadarMapFragment newInstance(int sectionNumber) {
+        RadarMapFragment fragment = new RadarMapFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public RadarMapFragment() {
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+
+//        TextView textView = (TextView) view.findViewById(R.id.section_label);
+//        textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
 
         MapsInitializer.initialize(getActivity());
 
@@ -62,11 +85,18 @@ public class RadarMapFragment extends Fragment implements OnMapReadyCallback,Loc
         map.setMyLocationEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
 
-        map.addMarker(new MarkerOptions()
-                .title("Sydney")
-                .snippet("The most populous city in Australia.")
-                .position(sydney));
+//        map.addMarker(new MarkerOptions()
+//                .title("Sydney")
+//                .snippet("The most populous city in Australia.")
+//                .position(sydney));
 
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ((MainActivity) activity).onSectionAttached(
+                getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
     @Override
@@ -143,7 +173,13 @@ public class RadarMapFragment extends Fragment implements OnMapReadyCallback,Loc
     // Called when the location has changed.
     @Override
     public void onLocationChanged(Location location) {
+
         mLocation = location;
+        LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+
+        GoogleMap map = mapView.getMap();
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 13));
+
         //Log.e(TAG, "onLocationChanged.");
     }
     @Override
