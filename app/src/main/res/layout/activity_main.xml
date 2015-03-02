@@ -7,25 +7,17 @@
     android:layout_height="match_parent"
     tools:context="jp.co.icomsys.it21.icomradar.MainActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/icomrador"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
+
     <fragment android:id="@+id/navigation_drawer"
         android:layout_width="120dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="#333"
+        android:background="#555"
         android:name="jp.co.icomsys.it21.icomradar.NavigationDrawerFragment"
         tools:layout="@layout/fragment_main" />
 

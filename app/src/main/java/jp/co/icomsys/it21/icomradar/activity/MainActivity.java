@@ -1,4 +1,4 @@
-package jp.co.icomsys.it21.icomradar;
+package jp.co.icomsys.it21.icomradar.activity;
 
 import android.app.Activity;
 
@@ -17,6 +17,17 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import jp.co.icomsys.it21.icomradar.NavigationDrawerFragment;
+import jp.co.icomsys.it21.icomradar.R;
 
 
 public class MainActivity extends Activity
@@ -106,12 +117,15 @@ public class MainActivity extends Activity
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements OnMapReadyCallback {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+
+        private MapView mapView;
+
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -134,7 +148,28 @@ public class MainActivity extends Activity
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+
+            MapsInitializer.initialize(getActivity());
+
+            mapView = (MapView) rootView.findViewById(R.id.map);
+            mapView.onCreate(savedInstanceState);
+            mapView.getMapAsync(this);
+
             return rootView;
+        }
+
+        @Override
+        public void onMapReady(GoogleMap map) {
+
+            LatLng sydney = new LatLng(-33.867, 151.206);
+
+            map.setMyLocationEnabled(true);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+
+            map.addMarker(new MarkerOptions()
+                    .title("Sydney")
+                    .snippet("The most populous city in Australia.")
+                    .position(sydney));
         }
 
         @Override
@@ -142,6 +177,36 @@ public class MainActivity extends Activity
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            mapView.onResume();
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            mapView.onPause();
+        }
+
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            mapView.onDestroy();
+        }
+
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            super.onSaveInstanceState(outState);
+            mapView.onSaveInstanceState(outState);
+        }
+
+        @Override
+        public void onLowMemory() {
+            super.onLowMemory();
+            mapView.onLowMemory();
         }
     }
 
