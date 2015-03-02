@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="left"
         android:background="#555"
-        android:name="jp.co.icomsys.it21.icomradar.NavigationDrawerFragment"
-        tools:layout="@layout/fragment_main" />
+        android:name="jp.co.icomsys.it21.icomradar.fragment.NavigationDrawerFragment"
+        tools:layout="@layout/fragment_map" />
 
 </android.support.v4.widget.DrawerLayout>

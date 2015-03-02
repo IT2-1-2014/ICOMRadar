@@ -6,4 +6,4 @@
     android:divider="@android:color/transparent"
     android:dividerHeight="0dp"
     android:background="#333"
-    tools:context="jp.co.icomsys.it21.icomradar.NavigationDrawerFragment" />
+    tools:context="jp.co.icomsys.it21.icomradar.fragment.NavigationDrawerFragment" />

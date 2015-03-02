@@ -1,4 +1,4 @@
-package jp.co.icomsys.it21.icomradar;
+package jp.co.icomsys.it21.icomradar.fragment;
 
 
 import android.app.ActionBar;
@@ -22,6 +22,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.MapView;
+
+import jp.co.icomsys.it21.icomradar.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
