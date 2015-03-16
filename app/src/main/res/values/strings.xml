@@ -2,10 +2,11 @@
 <resources>
 
     <string name="app_name">ICOMRadar</string>
+    <string name="title_section0">20m</string>
     <string name="title_section1">200m</string>
-    <string name="title_section2">1km</string>
+    <string name="title_section2">2km</string>
     <string name="title_section3">20km</string>
-    <string name="title_section4">100</string>
+    <string name="title_section4">100km</string>
     <string name="title_section5">メニューに戻る</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
